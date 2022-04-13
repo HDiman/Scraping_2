@@ -40,4 +40,4 @@ with open("all_categories_dict.json") as file:
     all_categories = json.load(file)
 # print(all_categories)
 
-# 2. Working with getted and saved information
+# 2. Working with got and saved information
