@@ -5,12 +5,12 @@ import json
 # 1. Getting information from website
 # url = "https://health-diet.ru/table_calorie/"
 # url = "https://health-diet.ru/table_calorie/?utm_source=leftMenu&utm_medium=table_calorie"
-#
-# headers = {
-#       "accept": "*/*",
-#       "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko)" \
-#                     " Chrome/99.0.4844.74 Safari/537.36",
-# }
+
+headers = {
+      "accept": "*/*",
+      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko)" \
+                    " Chrome/99.0.4844.74 Safari/537.36",
+}
 # req = requests.get(url, headers=headers)
 # src = req.text
 # # print(src)
@@ -41,3 +41,31 @@ with open("all_categories_dict.json") as file:
 # print(all_categories)
 
 # 2. Working with got and saved information
+count = 0
+for category_name, category_href in all_categories.items():
+
+    if count == 0:
+        rep = [",", " ", "-", "'", "__"]
+        for item in rep:
+            if item in category_name:
+                category_name = category_name.replace(item, "_")
+
+        req = requests.get(url=category_href, headers=headers)
+        src = req.text
+
+        with open(f"data/{count}_{category_name}.html", "w") as file:
+            file.write(src)
+
+        with open(f"data/{count}_{category_name}.html") as file:
+            src = file.read()
+
+        soup = BeautifulSoup(src, 'html.parser')
+
+        # cобираем заголовки таблицы
+        table_head = soup.find(class_="mzr-tc-group-table").find("tr").find_all("th")
+        print(table_head)
+
+
+        count += 1
+
+        # mzr-tc-group-table
